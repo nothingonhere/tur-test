@@ -19,6 +19,7 @@ TERMUX_PKG_HAS_DEBUG=false
 TERMUX_PKG_NO_STATICSPLIT=true
 TERMUX_PKG_HOSTBUILD=true
 TERMUX_PKG_UNDEF_SYMBOLS_FILES="all"
+TERMUX_PKG_AUTO_UPDATE=true
 
 # Override: download tarballs but don't auto-extract.
 # clonejdk.sh handles selective extraction based on TARGET_JDK.
@@ -194,6 +195,47 @@ termux_step_post_make_install() {
 	if [[ "$failure" = true ]]; then
 		termux_error_exit "openjdk-8.alternatives is not up to date, please update it."
 	fi
+}
+
+termux_pkg_auto_update() {
+	local tag hash1 hash2 ver_raw new_version
+	tag=$(git ls-remote --tags https://github.com/openjdk/jdk8u.git \
+		| awk -F/ '{print $NF}' \
+		| grep -E '^jdk8u[0-9]+-ga$' \
+		| sort -t u -k2 -V \
+		| tail -1)
+	[[ -z "$tag" ]] && termux_error_exit "no GA tag found for jdk8u"
+
+	if ! git ls-remote --tags https://github.com/openjdk/aarch32-port-jdk8u.git \
+		| awk -F/ '{print $NF}' \
+		| grep -qxF "$tag"; then
+		termux_error_exit "tag $tag not found in aarch32-port-jdk8u"
+	fi
+
+	hash1=$(git ls-remote https://github.com/openjdk/jdk8u.git "refs/tags/$tag" \
+		| awk '{print $1}' | head -1)
+	hash2=$(git ls-remote https://github.com/openjdk/aarch32-port-jdk8u.git "refs/tags/$tag" \
+		| awk '{print $1}' | head -1)
+	[[ -z "$hash1" ]] && termux_error_exit "no commit for tag in jdk8u"
+	[[ -z "$hash2" ]] && termux_error_exit "no commit for tag in aarch32-port"
+
+	ver_raw="${tag#jdk8u}"
+	ver_raw="${ver_raw%-ga}"
+	new_version="8.0.${ver_raw}"
+
+	if ! termux_pkg_is_update_needed "${TERMUX_PKG_VERSION#*:}" "${new_version}"; then
+		echo "INFO: No update needed. Already at version '${TERMUX_PKG_VERSION}'."
+		return 0
+	fi
+
+	sed -i \
+		"s|https://github.com/openjdk/jdk8u/archive/[a-f0-9]*\.tar\.gz|https://github.com/openjdk/jdk8u/archive/${hash1}.tar.gz|g" \
+		"${TERMUX_PKG_BUILDER_DIR}/build.sh"
+	sed -i \
+		"s|https://github.com/openjdk/aarch32-port-jdk8u/archive/[a-f0-9]*\.tar\.gz|https://github.com/openjdk/aarch32-port-jdk8u/archive/${hash2}.tar.gz|g" \
+		"${TERMUX_PKG_BUILDER_DIR}/build.sh"
+
+	termux_pkg_upgrade_version "${new_version}" --skip-version-check
 }
 
 termux_step_create_debscripts() {
