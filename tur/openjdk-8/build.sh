@@ -23,7 +23,7 @@ TERMUX_PKG_UNDEF_SYMBOLS_FILES="all"
 # Override: download tarballs but don't auto-extract.
 # clonejdk.sh handles selective extraction based on TARGET_JDK.
 termux_step_get_source() {
-	if [ -z "${TERMUX_PKG_SRCURL}" ] || [ "$TERMUX_PKG_SKIP_SRC_EXTRACT" = "true" ] || [ "$TERMUX_PKG_METAPACKAGE" = "true" ]; then
+	if [ -z "${TERMUX_PKG_SRCURL}" ] || [ "${TERMUX_PKG_SKIP_SRC_EXTRACT:-false}" = "true" ] || [ "${TERMUX_PKG_METAPACKAGE:-false}" = "true" ]; then
 		mkdir -p "$TERMUX_PKG_SRCDIR"
 		return
 	fi
