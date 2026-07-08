@@ -9,7 +9,7 @@ TERMUX_PKG_SRCURL=(
 )
 TERMUX_PKG_SHA256=(
     31e6eb3f04aa511ecfbd906d3f2227d637ece54d59e39614aa5e09493c4becdf
-    08aeae2a70f450c3c848ba897bd3d8957ebc188165a0c051f873d4e8f946d515
+    4761e5b889c68d93e42e1740b3e5f2a2c948c75d62cb496836c8b0bfdc9fb564
 )
 TERMUX_PKG_DEPENDS="freetype"
 TERMUX_PKG_RECOMMENDS="fontconfig, ca-certificates-java, resolv-conf"
