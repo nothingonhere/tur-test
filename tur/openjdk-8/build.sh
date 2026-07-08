@@ -28,12 +28,13 @@ termux_step_get_source() {
 		mkdir -p "$TERMUX_PKG_SRCDIR"
 		return
 	fi
-	termux_download_src_archive
+	termux_download "${TERMUX_PKG_SRCURL[0]}" \
+		"$TERMUX_PKG_CACHEDIR/jdk8u.tar.gz" \
+		"${TERMUX_PKG_SHA256[0]}"
+	termux_download "${TERMUX_PKG_SRCURL[1]}" \
+		"$TERMUX_PKG_CACHEDIR/aarch32.tar.gz" \
+		"${TERMUX_PKG_SHA256[1]}"
 	mkdir -p "$TERMUX_PKG_SRCDIR"
-	mv -f "$TERMUX_PKG_CACHEDIR/$(basename "${TERMUX_PKG_SRCURL[0]}")" \
-		"$TERMUX_PKG_CACHEDIR/jdk8u.tar.gz"
-	mv -f "$TERMUX_PKG_CACHEDIR/$(basename "${TERMUX_PKG_SRCURL[1]}")" \
-		"$TERMUX_PKG_CACHEDIR/aarch32.tar.gz"
 }
 
 _ensure_patchelf() {
