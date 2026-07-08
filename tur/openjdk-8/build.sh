@@ -2,10 +2,10 @@ TERMUX_PKG_HOMEPAGE=https://openjdk.java.net
 TERMUX_PKG_DESCRIPTION="Java development kit and runtime"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@SrErikCoderx"
-TERMUX_PKG_VERSION="8.0.502"
+TERMUX_PKG_VERSION="8.0.482"
 TERMUX_PKG_SRCURL=(
-    https://github.com/openjdk/jdk8u/archive/40657cfd8c0ba65a3402b27dab49cca1dbc3696f.tar.gz
-    https://github.com/openjdk/aarch32-port-jdk8u/archive/15ef9f9fc3e1ef61d253fe87500223e240be2052.tar.gz
+    https://github.com/openjdk/jdk8u/archive/4af7a23c1c34b2217301f1f4c51d2b6ea2850795.tar.gz
+    https://github.com/openjdk/aarch32-port-jdk8u/archive/4af7a23c1c34b2217301f1f4c51d2b6ea2850795.tar.gz
 )
 TERMUX_PKG_SHA256=(
     a15f4485a044c6d9cabb2d4f650cd9a2b5f910c4e99ab5351b198978d20e2e4c
@@ -225,6 +225,13 @@ termux_pkg_auto_update() {
 
 	if ! termux_pkg_is_update_needed "${TERMUX_PKG_VERSION#*:}" "${new_version}"; then
 		echo "INFO: No update needed. Already at version '${TERMUX_PKG_VERSION}'."
+		return 0
+	fi
+
+	# Solo tocar SRCURL si realmente vamos a completar el update
+	# (mismo gate que usa termux_pkg_upgrade_version internamente)
+	if [ "${BUILD_PACKAGES:-true}" != "true" ]; then
+		echo "INFO: [dry-run] Would update openjdk-8 to ${new_version} (SRCURL not modified)."
 		return 0
 	fi
 
