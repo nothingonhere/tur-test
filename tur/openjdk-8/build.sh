@@ -30,6 +30,10 @@ termux_step_get_source() {
 	fi
 	termux_download_src_archive
 	mkdir -p "$TERMUX_PKG_SRCDIR"
+	mv -f "$TERMUX_PKG_CACHEDIR/$(basename "${TERMUX_PKG_SRCURL[0]}")" \
+		"$TERMUX_PKG_CACHEDIR/jdk8u.tar.gz"
+	mv -f "$TERMUX_PKG_CACHEDIR/$(basename "${TERMUX_PKG_SRCURL[1]}")" \
+		"$TERMUX_PKG_CACHEDIR/aarch32.tar.gz"
 }
 
 _ensure_patchelf() {
