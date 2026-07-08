@@ -8,7 +8,7 @@ TERMUX_PKG_SRCURL=(
     https://github.com/openjdk/aarch32-port-jdk8u/archive/4af7a23c1c34b2217301f1f4c51d2b6ea2850795.tar.gz
 )
 TERMUX_PKG_SHA256=(
-    a15f4485a044c6d9cabb2d4f650cd9a2b5f910c4e99ab5351b198978d20e2e4c
+    31e6eb3f04aa511ecfbd906d3f2227d637ece54d59e39614aa5e09493c4becdf
     08aeae2a70f450c3c848ba897bd3d8957ebc188165a0c051f873d4e8f946d515
 )
 TERMUX_PKG_DEPENDS="freetype"
