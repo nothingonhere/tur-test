@@ -5,7 +5,7 @@ TERMUX_PKG_MAINTAINER="@SrErikCoderx"
 TERMUX_PKG_VERSION="8.0.482"
 TERMUX_PKG_SRCURL=(
     https://github.com/openjdk/jdk8u/archive/4af7a23c1c34b2217301f1f4c51d2b6ea2850795.tar.gz
-    https://github.com/openjdk/aarch32-port-jdk8u/archive/4af7a23c1c34b2217301f1f4c51d2b6ea2850795.tar.gz
+    https://github.com/openjdk/aarch32-port-jdk8u/archive/b2165a2663ca0129244559744b5bf4b57c627091.tar.gz
 )
 TERMUX_PKG_SHA256=(
     31e6eb3f04aa511ecfbd906d3f2227d637ece54d59e39614aa5e09493c4becdf
@@ -203,29 +203,30 @@ termux_step_post_make_install() {
 }
 
 termux_pkg_auto_update() {
-	local tag hash1 hash2 ver_raw new_version
-	tag=$(git ls-remote --tags https://github.com/openjdk/jdk8u.git \
+	local main_tag arm_tag hash1 hash2 ver_raw new_version
+
+	main_tag=$(git ls-remote --tags https://github.com/openjdk/jdk8u.git \
 		| awk -F/ '{print $NF}' \
 		| grep -E '^jdk8u[0-9]+-ga$' \
 		| sort -t u -k2 -V \
 		| tail -1)
-	[[ -z "$tag" ]] && termux_error_exit "no GA tag found for jdk8u"
+	[[ -z "$main_tag" ]] && termux_error_exit "no GA tag found for jdk8u"
 
-	if ! git ls-remote --tags https://github.com/openjdk/aarch32-port-jdk8u.git \
+	ver_raw="${main_tag#jdk8u}"
+	ver_raw="${ver_raw%-ga}"
+
+	arm_tag=$(git ls-remote --tags https://github.com/openjdk/aarch32-port-jdk8u.git \
 		| awk -F/ '{print $NF}' \
-		| grep -qxF "$tag"; then
-		termux_error_exit "tag $tag not found in aarch32-port-jdk8u"
-	fi
+		| grep -E "^jdk8u${ver_raw}-ga-aarch32-[0-9]+\$")
+	[[ -z "$arm_tag" ]] && termux_error_exit "no aarch32-specific tag found for version ${ver_raw}"
 
-	hash1=$(git ls-remote https://github.com/openjdk/jdk8u.git "refs/tags/$tag" \
+	hash1=$(git ls-remote https://github.com/openjdk/jdk8u.git "refs/tags/$main_tag" \
 		| awk '{print $1}' | head -1)
-	hash2=$(git ls-remote https://github.com/openjdk/aarch32-port-jdk8u.git "refs/tags/$tag" \
+	hash2=$(git ls-remote https://github.com/openjdk/aarch32-port-jdk8u.git "refs/tags/$arm_tag" \
 		| awk '{print $1}' | head -1)
 	[[ -z "$hash1" ]] && termux_error_exit "no commit for tag in jdk8u"
 	[[ -z "$hash2" ]] && termux_error_exit "no commit for tag in aarch32-port"
 
-	ver_raw="${tag#jdk8u}"
-	ver_raw="${ver_raw%-ga}"
 	new_version="8.0.${ver_raw}"
 
 	if ! termux_pkg_is_update_needed "${TERMUX_PKG_VERSION#*:}" "${new_version}"; then

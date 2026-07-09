@@ -7,7 +7,7 @@ set -e
 rm -rf openjdk
 mkdir -p openjdk
 
-if [[ "$TARGET_JDK" == "aarch32" ]]; then
+if [[ "$TARGET_JDK" == "arm" ]]; then
   tar xf "$TERMUX_PKG_CACHEDIR"/aarch32.tar.gz \
     -C openjdk --strip-components=1
 else
