@@ -2,14 +2,14 @@ TERMUX_PKG_HOMEPAGE=https://openjdk.java.net
 TERMUX_PKG_DESCRIPTION="Java development kit and runtime"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@SrErikCoderx"
-TERMUX_PKG_VERSION="8.0.482"
+TERMUX_PKG_VERSION="8.0.492"
 TERMUX_PKG_SRCURL=(
-    https://github.com/openjdk/jdk8u/archive/4af7a23c1c34b2217301f1f4c51d2b6ea2850795.tar.gz
-    https://github.com/openjdk/aarch32-port-jdk8u/archive/b2165a2663ca0129244559744b5bf4b57c627091.tar.gz
+    https://github.com/openjdk/jdk8u/archive/9cecb1477fff90f2d367a4df0a94cb44510d1ba9.tar.gz
+    https://github.com/openjdk/aarch32-port-jdk8u/archive/5007d4efb98eef1ac2507a9580d7a1754c6797d3.tar.gz
 )
 TERMUX_PKG_SHA256=(
-    31e6eb3f04aa511ecfbd906d3f2227d637ece54d59e39614aa5e09493c4becdf
-    2a20325351d20e5db7b434c4d339095dcdfbc6f10b6740d9e0e566851830d932
+    8e44d6a9c04f590f3f0c6a6b95a74733ba8c347f4c50993dea7d68e06861ff1e
+    395e1cec295d3b885a65efe75d59d231946b91d885052c52602f96c5c3f0cba5
 )
 TERMUX_PKG_DEPENDS="freetype"
 TERMUX_PKG_RECOMMENDS="fontconfig, ca-certificates-java, resolv-conf"
