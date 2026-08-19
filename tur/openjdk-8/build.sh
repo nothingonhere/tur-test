@@ -2,10 +2,10 @@ TERMUX_PKG_HOMEPAGE=https://openjdk.java.net
 TERMUX_PKG_DESCRIPTION="Java development kit and runtime"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@SrErikCoderx"
-TERMUX_PKG_VERSION="8.0.482"
+TERMUX_PKG_VERSION="8.0.492"
 TERMUX_PKG_SRCURL=(
     "https://github.com/openjdk/jdk8u/archive/refs/tags/jdk8u${TERMUX_PKG_VERSION##*.}-ga.tar.gz"
-    "https://github.com/openjdk/aarch32-port-jdk8u/archive/refs/tags/jdk8u482-ga-aarch32-20260122.tar.gz"
+    "https://github.com/openjdk/aarch32-port-jdk8u/archive/refs/tags/jdk8u492-ga-aarch32-20260428.tar.gz"
 )
 TERMUX_PKG_SHA256=(
     3744ed83399b4646c6b64cb7ec3539ed43917edae56378e9853a62ede670a9b7
@@ -232,7 +232,7 @@ termux_pkg_auto_update() {
 	fi
 
 	sed -i \
-		"s|https://github.com/openjdk/aarch32-port-jdk8u/archive/refs/tags/[^\"]*\.tar\.gz|https://github.com/openjdk/aarch32-port-jdk8u/archive/refs/tags/${arm_tag}.tar.gz|g" \
+		"s|https://github.com/openjdk/aarch32-port-jdk8u/archive/refs/tags/[^\"]*\.tar\.gz|https://github.com/openjdk/aarch32-port-jdk8u/archive/refs/tags/jdk8u492-ga-aarch32-20260428.tar.gz|g" \
 		"${TERMUX_PKG_BUILDER_DIR}/build.sh"
 
 	termux_pkg_upgrade_version "${new_version}" --skip-version-check
